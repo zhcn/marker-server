@@ -1,1 +1,1 @@
-go build -o test test.go
+go build -o market-server main/server.go
