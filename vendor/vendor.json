@@ -71,6 +71,12 @@
 			"revisionTime": "2018-08-30T10:17:45Z"
 		},
 		{
+			"checksumSHA1": "OE0cIrW8iS8g6N1SYWqgrpPiIFw=",
+			"path": "github.com/mmcloughlin/geohash",
+			"revision": "f7f2bcae3294530249c63fcb6fb6d5e83eee4e73",
+			"revisionTime": "2018-10-09T05:38:02Z"
+		},
+		{
 			"checksumSHA1": "j/aP/n+qaMNBUou/a2m2LDJ5q3Q=",
 			"path": "github.com/ugorji/go/codec",
 			"revision": "772ced7fd4c2f6322c07537a9a93b68d74551fa6",

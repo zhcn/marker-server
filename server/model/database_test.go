@@ -1,8 +1,10 @@
 package model
 
 import (
+	"fmt"
 	"market-server/server/common/types"
 	"testing"
+	"time"
 )
 
 var ctx types.Context
@@ -53,6 +55,8 @@ func TestAddShop(t *testing.T) {
 	shop.CategoryId = 1
 	shop.Star = 100
 	shop.SellerId = 1
+	shop.DispatchMin = 0
+	shop.DispatchPrice = 5
 	AddShop(&shop, &ctx)
 }
 
@@ -69,6 +73,8 @@ func TestUpdateShop(t *testing.T) {
 	shop.CategoryId = 1
 	shop.Star = 200
 	shop.SellerId = 2
+	shop.DispatchMin = 1
+	shop.DispatchPrice = 10
 	AddShop(&shop, &ctx)
 	shop.Lat = 100
 	jsonPrint(shop)
@@ -144,4 +150,56 @@ func TestDelSeller(t *testing.T) {
 	seller.AuthImg = "authimg"
 	AddSeller(&seller, &ctx)
 	DelSeller(&seller, &ctx)
+}
+func TestAddData(t *testing.T) {
+	var category types.Category
+	var shop types.Shop
+	var item types.Item
+	category.Name = "测试golang"
+	AddCategory(&category, &ctx)
+	shop.Name = "shop测试Del"
+	shop.Lat = 1
+	shop.Lon = 2
+	shop.Img = "img"
+	shop.CategoryId = category.Id
+	shop.Star = 200
+	shop.SellerId = 2
+	AddShop(&shop, &ctx)
+	item.Name = "item测试Del"
+	item.ShopId = shop.Id
+	item.Price = 100.123456
+	item.Img = "img"
+	AddItem(&item, &ctx)
+}
+
+func TestAddOrder(t *testing.T) {
+	var order types.Order
+	order.Price = 100.123456
+	order.UserId = 1
+	order.Ts = time.Now().Unix()
+	fmt.Println(order.Ts)
+	order.Cancel = 0
+	AddOrder(&order, nil)
+}
+
+func TestAddItemCategory(t *testing.T) {
+	var itemCategory types.ItemCategory
+	itemCategory.Name = "测试itemCategory"
+	itemCategory.ShopId = 1
+	AddItemCategory(&itemCategory, nil)
+}
+func TestUpdateItemCategory(t *testing.T) {
+	var itemCategory types.ItemCategory
+	itemCategory.Name = "测试update itemCategory"
+	itemCategory.ShopId = 1
+	AddItemCategory(&itemCategory, nil)
+	itemCategory.ShopId = 2
+	UpdateItemCategory(&itemCategory, nil)
+}
+func TestDelItemCategory(t *testing.T) {
+	var itemCategory types.ItemCategory
+	itemCategory.Name = "测试del itemCategory"
+	itemCategory.ShopId = 1
+	AddItemCategory(&itemCategory, nil)
+	DelItemCategory(&itemCategory, nil)
 }

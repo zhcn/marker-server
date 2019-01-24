@@ -1,0 +1,105 @@
+[
+ {
+  "Id": 1,
+  "Name": "超市",
+  "ShopList": [
+   {
+    "Id": 1,
+    "Name": "家乐福",
+    "Lat": 1,
+    "Lon": 2,
+    "Img": "https://www.koudai.com/image/jlf.png",
+    "CategoryId": 1,
+    "Star": 200,
+    "SellerId": 2,
+    "DispatchMin": 0,
+    "DispatchPrice": 5,
+    "ItemCategoryList": [
+     {
+      "Id": 1,
+      "Name": "啤酒",
+      "ShopId": 1,
+      "ItemList": [
+       {
+        "Id": 1,
+        "Name": "item测试",
+        "Price": 100.123,
+        "Img": "https://www.koudai.com/image/257383a02003b4aa.jpg",
+        "ShopId": 1,
+        "BarCode": "123456",
+        "ItemCategoryId": 1
+       },
+       {
+        "Id": 1,
+        "Name": "item测试",
+        "Price": 100.123,
+        "Img": "https://www.koudai.com/image/257383a02003b4aa.jpg",
+        "ShopId": 1,
+        "BarCode": "123456",
+        "ItemCategoryId": 1
+       },
+       {
+        "Id": 1,
+        "Name": "item测试",
+        "Price": 100.123,
+        "Img": "https://www.koudai.com/image/257383a02003b4aa.jpg",
+        "ShopId": 1,
+        "BarCode": "123456",
+        "ItemCategoryId": 1
+       }
+
+
+      ]
+     },
+     {
+      "Id": 1,
+      "Name": "饮料",
+      "ShopId": 1,
+      "ItemList": [
+       {
+        "Id": 1,
+        "Name": "item测试",
+        "Price": 100.123,
+        "Img": "https://www.koudai.com/image/257383a02003b4aa.jpg",
+        "ShopId": 1,
+        "BarCode": "123456",
+        "ItemCategoryId": 1
+       }
+      ]
+     }
+
+    ]
+   },
+   {
+    "Id": 2,
+    "Name": "家乐福",
+    "Lat": 1,
+    "Lon": 2,
+    "Img": "https://www.koudai.com/image/jlf.png",
+    "CategoryId": 1,
+    "Star": 200,
+    "SellerId": 2,
+    "DispatchMin": 0,
+    "DispatchPrice": 5,
+    "ItemCategoryList": [
+     {
+      "Id": 2,
+      "Name": "itemCategory",
+      "ShopId": 2,
+      "ItemList": [
+       {
+        "Id": 2,
+        "Name": "item测试",
+        "Price": 100.123,
+        "Img": "https://www.koudai.com/image/d2d7efbb8e5da030.jpg",
+        "ShopId": 2,
+        "BarCode": "123456",
+        "ItemCategoryId": 2
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]

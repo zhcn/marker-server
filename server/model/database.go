@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gocraft/dbr"
+	"market-server/server/common/geo"
 	"market-server/server/common/types"
 )
 
@@ -39,11 +40,15 @@ func jsonPrint(t interface{}) {
 	fmt.Println(string(data))
 }
 
+func JsonPrint(t interface{}) {
+	jsonPrint(t)
+}
+
 func GetCategory(ctx *types.Context) ([]types.Category, error) {
 	var categoryList []types.Category
 	sess := Database.GetSession()
 	sess.Select("*").From("category").Load(&categoryList)
-	jsonPrint(categoryList)
+	//jsonPrint(categoryList)
 	return categoryList, nil
 }
 
@@ -69,20 +74,22 @@ func GetAllShop(ctx *types.Context) ([]types.Shop, error) {
 	var shopList []types.Shop
 	sess := Database.GetSession()
 	sess.Select("*").From("shop").Load(&shopList)
-	jsonPrint(shopList)
+	//jsonPrint(shopList)
 	return shopList, nil
 }
 
 func AddShop(shop *types.Shop, ctx *types.Context) error {
+	shop.GeoHash = geo.EncodeInt(shop.Lat, shop.Lon)
 	sess := Database.GetSession()
-	sess.InsertInto("shop").Columns("name", "star", "categoryid", "img", "lat", "lon", "sellerid").
+	sess.InsertInto("shop").Columns("name", "star", "categoryid", "img", "lat", "lon", "geohash", "sellerid", "dispatch_min", "dispatch_price").
 		Record(shop).
 		Exec()
-	jsonPrint(shop)
+	//jsonPrint(shop)
 	return nil
 }
 
 func UpdateShop(shop *types.Shop, ctx *types.Context) error {
+	shop.GeoHash = geo.EncodeInt(shop.Lat, shop.Lon)
 	sess := Database.GetSession()
 	sess.Update("shop").
 		Set("name", shop.Name).
@@ -91,17 +98,49 @@ func UpdateShop(shop *types.Shop, ctx *types.Context) error {
 		Set("img", shop.Img).
 		Set("lat", shop.Lat).
 		Set("lon", shop.Lon).
+		Set("geohash", shop.GeoHash).
 		Set("sellerid", shop.SellerId).
+		Set("dispatch_min", shop.DispatchMin).
+		Set("dispatch_price", shop.DispatchPrice).
 		Where("id=?", shop.Id).
 		Exec()
 
-	jsonPrint(shop)
+	//jsonPrint(shop)
 	return nil
 }
 
 func DelShop(shop *types.Shop, ctx *types.Context) error {
 	sess := Database.GetSession()
 	sess.DeleteFrom("shop").Where("id=?", shop.Id).Exec()
+	return nil
+}
+
+func GetItemCategory(shop *types.Shop, ctx *types.Context) ([]types.ItemCategory, error) {
+	var categoryList []types.ItemCategory
+	sess := Database.GetSession()
+	sess.Select("*").From("item_category").Where("shopid=?", shop.Id).Load(&categoryList)
+	//jsonPrint(categoryList)
+	return categoryList, nil
+}
+
+func AddItemCategory(category *types.ItemCategory, ctx *types.Context) error {
+	sess := Database.GetSession()
+	sess.InsertInto("item_category").Columns("name", "shopid").Record(category).Exec()
+	return nil
+}
+
+func UpdateItemCategory(category *types.ItemCategory, ctx *types.Context) error {
+	sess := Database.GetSession()
+	sess.Update("item_category").
+		Set("name", category.Name).
+		Set("shopid", category.ShopId).
+		Where("id=?", category.Id).Exec()
+	return nil
+}
+
+func DelItemCategory(category *types.ItemCategory, ctx *types.Context) error {
+	sess := Database.GetSession()
+	sess.DeleteFrom("item_category").Where("id=?", category.Id).Exec()
 	return nil
 }
 
@@ -115,7 +154,7 @@ func GetAllItems(shop *types.Shop, ctx *types.Context) ([]types.Item, error) {
 func AddItem(item *types.Item, ctx *types.Context) error {
 	sess := Database.GetSession()
 	sess.InsertInto("item").
-		Columns("name", "shopid", "price", "img").
+		Columns("name", "price", "img", "shopid", "barcode", "item_category_id").
 		Record(item).
 		Exec()
 	return nil
@@ -127,6 +166,8 @@ func UpdateItem(item *types.Item, ctx *types.Context) error {
 		Set("shopid", item.ShopId).
 		Set("price", item.Price).
 		Set("img", item.Img).
+		Set("barcode", item.BarCode).
+		Set("item_category_id", item.ItemCategoryId).
 		Where("id=?", item.Id).
 		Exec()
 	return nil
@@ -161,5 +202,14 @@ func DelSeller(seller *types.Seller, ctx *types.Context) error {
 	sess.DeleteFrom("seller").
 		Where("id=?", seller.Id).
 		Exec()
+	return nil
+}
+func AddOrder(order *types.Order, ctx *types.Context) error {
+	sess := Database.GetSession()
+	_, err := sess.InsertInto("orders").
+		Columns("items", "price", "userid", "ts", "cancel").
+		Record(order).
+		Exec()
+	fmt.Println(err)
 	return nil
 }
